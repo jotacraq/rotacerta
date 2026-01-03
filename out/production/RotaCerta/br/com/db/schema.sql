@@ -9,7 +9,7 @@ CREATE TABLE entregadores (
 
 CREATE TABLE entregas (
     id SERIAL PRIMARY KEY,
-    entregador_id INTEGER NOT NULL,
+    entregador_id INTEGER,
     codigo VARCHAR(20) UNIQUE NOT NULL,
     cep CHAR(8),
     estado VARCHAR(50),

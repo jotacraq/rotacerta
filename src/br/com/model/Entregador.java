@@ -1,5 +1,7 @@
 package br.com.model;
 
+import java.sql.Timestamp;
+
 public class Entregador {
 
     private Integer id;
@@ -7,21 +9,25 @@ public class Entregador {
     private String cpf;
     private int idade;
 
-    // Construtor pra quando o objeto vir do sql
-
-    public Entregador(Integer id, String nome, String cpf, int idade) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = idade;
+    private Entregador() {
     }
 
-    // Construtor pra quando eu enviar o objeto pelo insert
+    public static Entregador fromDatabase(int id, String nome, String cpf, int idade) {
+        Entregador e = new Entregador();
+        e.id = id;
+        e.nome = nome;
+        e.cpf = cpf;
+        e.idade = idade;
+        return e;
+    }
 
-    public Entregador(String nome, String cpf, int idade) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.idade = idade;
+
+    public static Entregador paraInsercao(String nome, String cpf, int idade) {
+        Entregador e = new Entregador();
+        e.nome = nome;
+        e.cpf = cpf;
+        e.idade = idade;
+        return e;
     }
 
     public Integer getId() {

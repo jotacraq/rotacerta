@@ -13,7 +13,7 @@ public class EntregadorService {
         this.repository = repository;
     }
 
-    public void cadastrar(Entregador entregador) {
+    public void cadastrarEntregador(Entregador entregador) {
 
         if (entregador.getCpf().length() > 11) {
             throw new IllegalArgumentException("ERRO: Tamanho inválido de CPF!");
@@ -22,7 +22,7 @@ public class EntregadorService {
         repository.inserir(entregador);
     }
 
-    public List<Entregador> listarTodos() {
+    public List<Entregador> listarTodosEntregadores() {
         return repository.buscarTodos();
     }
 }

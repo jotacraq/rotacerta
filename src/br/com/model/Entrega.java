@@ -1,40 +1,55 @@
 package br.com.model;
 
+import java.sql.Timestamp;
+
 public class Entrega {
 
-    private Integer id;
+    private int id;
+    private Integer entregadorId;
     private String codigo;
     private String cep;
     private String estado;
-    private StatusEntrega status = StatusEntrega.PENDENTE;
-    private Entregador entregador;
+    private String status;
+    private Timestamp dataEntrega;
 
-    // Construtor pra quando o objeto vir do sql
-
-    public Entrega(Integer id, String codigo, String cep, String estado, StatusEntrega status, Entregador entregador) {
-        this.id = id;
-        this.codigo = codigo;
-        this.cep = cep;
-        this.estado = estado;
-        this.status = status;
-        this.entregador = entregador;
+    private Entrega() {
     }
 
-    // Construtor pra quando eu enviar o objeto pelo insert
-
-    public Entrega(String codigo, String cep, String estado, Entregador entregador) {
-        this.codigo = codigo;
-        this.cep = cep;
-        this.estado = estado;
-        this.entregador = entregador;
+    public static Entrega fromDatabase(int id, int entregadorId, String codigo, String cep, String estado, String status, Timestamp dataEntrega) {
+        Entrega e = new Entrega();
+        e.id = id;
+        e.entregadorId = entregadorId;
+        e.codigo = codigo;
+        e.cep = cep;
+        e.estado = estado;
+        e.status = status;
+        e.dataEntrega = dataEntrega;
+        return e;
     }
 
-    public Integer getId() {
+    public static Entrega paraInsercao(String codigo, String cep, String estado) {
+        Entrega e = new Entrega();
+        e.codigo = codigo;
+        e.cep = cep;
+        e.estado = estado;
+        e.status = StatusEntrega.PENDENTE.name();
+        return e;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public Integer getEntregadorId() {
+        return entregadorId;
+    }
+
+    public void setEntregadorId(Integer entregadorId) {
+        this.entregadorId = entregadorId;
     }
 
     public String getCodigo() {
@@ -61,19 +76,19 @@ public class Entrega {
         this.estado = estado;
     }
 
-    public StatusEntrega getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(StatusEntrega status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Entregador getEntregador() {
-        return entregador;
+    public Timestamp getDataEntrega() {
+        return dataEntrega;
     }
 
-    public void setEntregador(Entregador entregador) {
-        this.entregador = entregador;
+    public void setDataEntrega(Timestamp dataEntrega) {
+        this.dataEntrega = dataEntrega;
     }
 }

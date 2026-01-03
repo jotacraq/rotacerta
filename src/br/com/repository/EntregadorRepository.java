@@ -43,17 +43,17 @@ public class EntregadorRepository {
             List<Entregador> entregadores = new ArrayList<>();
 
             try (PreparedStatement stmt = conn.prepareStatement(sql);
-                 ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
 
-                while (rs.next()) {
+            while (rs.next()) {
 
-                    Entregador e = new Entregador(
+                    Entregador e = Entregador.fromDatabase(
+                            rs.getInt("id"),
                             rs.getString("nome"),
                             rs.getString("cpf"),
                             rs.getInt("idade")
                     );
 
-                    e.setId(rs.getInt("id"));
                     entregadores.add(e);
                 }
 
@@ -61,7 +61,6 @@ public class EntregadorRepository {
                 throw new RuntimeException("Erro ao buscar entregadores", e);
             }
 
-            return entregadores;
-
+        return entregadores;
         }
 }
