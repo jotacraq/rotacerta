@@ -3,8 +3,6 @@ package br.com.app;
 import br.com.model.ConexaoDB;
 import br.com.model.Entregador;
 import br.com.model.Entrega;
-import br.com.model.Entregador;
-import br.com.model.ConexaoDB;
 import br.com.repository.EntregaRepository;
 import br.com.repository.EntregadorRepository;
 import br.com.service.EntregaService;
@@ -37,7 +35,8 @@ public class Main {
                 System.out.println("ENTREGAS:");
                 System.out.println("3. Registrar Entrega");
                 System.out.println("4. Listar Entregas");
-                System.out.println("5. Sair");
+                System.out.println("5. Associar Entregador à Entrega");
+                System.out.println("6. Sair");
                 System.out.println("-----------------------------------");
                 System.out.print("DIGITE SUA ESCOLHA: ");
 
@@ -126,7 +125,20 @@ public class Main {
                         break;
 
                     case 5:
-                        System.out.println("SAINDO DO PROGRAMA!");
+                        System.out.print("CÓDIGO DA ENTREGA: ");
+                        String codigoEntrega = scanner.nextLine();
+
+                        System.out.print("ID DO ENTREGADOR: ");
+                        int entregadorId = scanner.nextInt();
+                        scanner.nextLine();
+
+                        entregaService.associarEntregador(codigoEntrega, entregadorId);
+
+                        System.out.println("ENTREGADOR ASSOCIADO À ENTREGA!");
+                        break;
+
+                    case 6:
+                        System.out.println("SAINDO DO PROGRAMA...");
                         scanner.close();
                         return;
 

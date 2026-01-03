@@ -16,7 +16,7 @@ public class EntregaService {
     public void cadastrarEntrega(Entrega entrega) {
 
         if (entrega.getCep().length() > 8) {
-            throw new IllegalArgumentException("ERRO: Tamanho inválido de CEP!");
+            throw new IllegalArgumentException("ERRO: TAMANHO INVÁLIDO DE CEP!");
         }
 
         repository.inserir(entrega);
@@ -25,4 +25,14 @@ public class EntregaService {
     public List<Entrega> listarTodasEntregas() {
         return repository.buscarTodos();
     }
+
+    public void associarEntregador(String codigoEntrega, int entregadorId) {
+
+        if (codigoEntrega == null || codigoEntrega.isBlank()) {
+            throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
+        }
+
+        repository.associarEntregador(codigoEntrega, entregadorId);
+    }
+
 }

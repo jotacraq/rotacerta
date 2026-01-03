@@ -1,6 +1,7 @@
 package br.com.repository;
 
 import br.com.model.Entrega;
+import br.com.model.StatusEntrega;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,5 +73,26 @@ public class EntregaRepository {
         }
 
         return entregas;
+    }
+
+    public void associarEntregador(String codigoEntrega, int entregadorId) {
+
+        String sql = """
+        UPDATE entregas
+        SET entregador_id = ?, status = ?
+        WHERE codigo = ?
+    """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, entregadorId);
+            stmt.setString(2, StatusEntrega.EM_ROTA.name());
+            stmt.setString(3, codigoEntrega);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao associar entregador à entrega", e);
+        }
     }
 }
