@@ -1,29 +1,38 @@
 package br.com.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class Entrega {
 
     private int id;
-    private Integer entregadorId;
     private String codigo;
     private String cep;
     private String estado;
     private String status;
     private Timestamp dataEntrega;
 
-    private Entrega() {
-    }
+    private Entregador entregador; // 👈 RELACIONAMENTO
 
-    public static Entrega fromDatabase(int id, int entregadorId, String codigo, String cep, String estado, String status, Timestamp dataEntrega) {
+    private Entrega() {}
+
+    public static Entrega fromDatabase(ResultSet rs) throws SQLException {
         Entrega e = new Entrega();
-        e.id = id;
-        e.entregadorId = entregadorId;
-        e.codigo = codigo;
-        e.cep = cep;
-        e.estado = estado;
-        e.status = status;
-        e.dataEntrega = dataEntrega;
+
+        e.codigo = rs.getString("codigo");
+        e.cep = rs.getString("cep");
+        e.estado = rs.getString("estado");
+        e.status = rs.getString("status");
+        e.dataEntrega = rs.getTimestamp("data_entrega");
+
+        e.entregador = Entregador.fromDatabase(
+                rs.getInt("entregador_id"),
+                rs.getString("nome"),
+                rs.getString("cpf"),
+                rs.getInt("idade")
+        );
+
         return e;
     }
 
@@ -36,20 +45,16 @@ public class Entrega {
         return e;
     }
 
+    public Entregador getEntregador() {
+        return entregador;
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Integer getEntregadorId() {
-        return entregadorId;
-    }
-
-    public void setEntregadorId(Integer entregadorId) {
-        this.entregadorId = entregadorId;
     }
 
     public String getCodigo() {
@@ -90,5 +95,9 @@ public class Entrega {
 
     public void setDataEntrega(Timestamp dataEntrega) {
         this.dataEntrega = dataEntrega;
+    }
+
+    public void setEntregador(Entregador entregador) {
+        this.entregador = entregador;
     }
 }

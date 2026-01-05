@@ -3,6 +3,7 @@ package br.com.service;
 import br.com.model.Entrega;
 import br.com.repository.EntregaRepository;
 
+import java.awt.*;
 import java.util.List;
 
 public class EntregaService {
@@ -33,6 +34,24 @@ public class EntregaService {
         }
 
         repository.associarEntregador(codigoEntrega, entregadorId);
+    }
+
+    public void finalizarEntregar(String codigoEntregaFinal) {
+
+        if (codigoEntregaFinal == null || codigoEntregaFinal.isBlank()) {
+            throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
+        }
+
+        repository.finalizarEntrega(codigoEntregaFinal);
+    }
+
+    public void cancelarEntrega(String codigoEntregaAtiva) {
+
+        if (codigoEntregaAtiva == null || codigoEntregaAtiva.isBlank()) {
+            throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
+        }
+
+        repository.excluirEntrega(codigoEntregaAtiva);
     }
 
 }

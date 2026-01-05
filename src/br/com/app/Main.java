@@ -10,6 +10,7 @@ import br.com.service.EntregadorService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,7 +37,9 @@ public class Main {
                 System.out.println("3. Registrar Entrega");
                 System.out.println("4. Listar Entregas");
                 System.out.println("5. Associar Entregador à Entrega");
-                System.out.println("6. Sair");
+                System.out.println("6. Finalizar Entrega");
+                System.out.println("7. Cancelar Entrega");
+                System.out.println("8. Sair");
                 System.out.println("-----------------------------------");
                 System.out.print("DIGITE SUA ESCOLHA: ");
 
@@ -47,7 +50,7 @@ public class Main {
                 }
 
                 int opcao = scanner.nextInt();
-                scanner.nextLine(); // consumir Enter
+                scanner.nextLine();
 
                 switch (opcao) {
 
@@ -73,13 +76,14 @@ public class Main {
                     case 2:
                         List<Entregador> entregadores = entregadorService.listarTodosEntregadores();
 
-                        System.out.println("\nID | NOME | CPF | IDADE");
+                        System.out.println("\n=== ENTREGADORES ===\n");
+
                         for (Entregador e : entregadores) {
                             System.out.println(
-                                    e.getId() + " | " +
-                                            e.getNome() + " | " +
-                                            e.getCpf() + " | " +
-                                            e.getIdade()
+                                    "ID: " + e.getId() +
+                                            " | Nome: " + e.getNome() +
+                                            " | CPF: " + e.getCpf() +
+                                            " | Idade: " + e.getIdade()
                             );
                         }
 
@@ -108,15 +112,26 @@ public class Main {
                     case 4:
                         List<Entrega> entregas = entregaService.listarTodasEntregas();
 
-                        System.out.println("\nID | CÓDIGO | CEP | ESTADO | STATUS | DATA");
+                        DateTimeFormatter formatter =
+                                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+                        System.out.println("\n=== LISTA DE ENTREGAS ===\n");
+
                         for (Entrega e : entregas) {
+
+                            String dataFormatada =
+                                    e.getDataEntrega() != null
+                                            ? e.getDataEntrega().toLocalDateTime().format(formatter)
+                                            : "-";
+
                             System.out.println(
-                                    e.getId() + " | " +
-                                            e.getCodigo() + " | " +
-                                            e.getCep() + " | " +
-                                            e.getEstado() + " | " +
-                                            e.getStatus() + " | " +
-                                            e.getDataEntrega()
+                                    "Código: " + e.getCodigo() +
+                                            " | CEP: " + e.getCep() +
+                                            " | Estado: " + e.getEstado() +
+                                            " | Status: " + e.getStatus() +
+                                            " | Data: " + dataFormatada +
+                                            " | Entregador: " + e.getEntregador().getNome() +
+                                            " | CPF: " + e.getEntregador().getCpf()
                             );
                         }
 
@@ -138,6 +153,24 @@ public class Main {
                         break;
 
                     case 6:
+                        System.out.print("CODIGO DA ENTREGA: ");
+                        String codigoEntregaFinal = scanner.nextLine();
+
+                        entregaService.finalizarEntregar(codigoEntregaFinal);
+
+                        System.out.println("ENTREGA FINALIZADA!");
+                        break;
+
+                    case 7:
+                        System.out.print("CODIGO DA ENTREGA: ");
+                        String codigoEntregaAtiva = scanner.nextLine();
+
+                        entregaService.cancelarEntrega(codigoEntregaAtiva);
+
+                        System.out.println("ENTREGA CANCELADA!");
+                        break;
+
+                    case 8:
                         System.out.println("SAINDO DO PROGRAMA...");
                         scanner.close();
                         return;

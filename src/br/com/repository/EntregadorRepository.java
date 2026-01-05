@@ -32,7 +32,7 @@ public class EntregadorRepository {
                 stmt.executeUpdate();
 
             } catch (SQLException e) {
-                throw new RuntimeException("Erro ao inserir o entregador: ", e);
+                throw new RuntimeException("ERRO: Falha ao registrar entregador", e);
             }
         }
 
@@ -58,7 +58,7 @@ public class EntregadorRepository {
                 }
 
             } catch (SQLException e) {
-                throw new RuntimeException("Erro ao buscar entregadores", e);
+                throw new RuntimeException("ERRO: Falha ao listar entregadores", e);
             }
 
         return entregadores;

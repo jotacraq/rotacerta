@@ -35,7 +35,7 @@ public class EntregaRepository {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao registrar entrega", e);
+            throw new RuntimeException("ERRO: Falha ao registrar a entrega", e);
         }
     }
 
@@ -43,9 +43,20 @@ public class EntregaRepository {
     public List<Entrega> buscarTodos() {
 
         String sql = """
-        SELECT id, entregador_id, codigo, cep, estado, status, data_entrega
-        FROM entregas
-    """;
+            SELECT
+                e.entregador_id,
+                e.codigo,
+                e.cep,
+                e.estado,
+                e.status,
+                e.data_entrega,
+                en.nome,
+                en.cpf,
+                en.idade
+            FROM entregas e
+            INNER JOIN entregadores en ON en.id = e.entregador_id
+                """;
+
 
         List<Entrega> entregas = new ArrayList<>();
 
@@ -53,23 +64,13 @@ public class EntregaRepository {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-
-                Entrega e = Entrega.fromDatabase(
-                        rs.getInt("id"),
-                        rs.getInt("entregador_id"),
-                        rs.getString("codigo"),
-                        rs.getString("cep"),
-                        rs.getString("estado"),
-                        rs.getString("status"),
-                        rs.getTimestamp("data_entrega")
-                );
-
-                entregas.add(e);
+                Entrega entrega = Entrega.fromDatabase(rs);
+                entregas.add(entrega);
             }
 
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar entregas", e);
+        } catch (SQLException ex) {
+            throw new RuntimeException("ERRO: Falha ao listar entregas", ex);
         }
 
         return entregas;
@@ -78,10 +79,10 @@ public class EntregaRepository {
     public void associarEntregador(String codigoEntrega, int entregadorId) {
 
         String sql = """
-        UPDATE entregas
-        SET entregador_id = ?, status = ?
-        WHERE codigo = ?
-    """;
+                UPDATE entregas
+                SET entregador_id = ?, status = ?
+                WHERE codigo = ?
+                """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -92,7 +93,45 @@ public class EntregaRepository {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao associar entregador à entrega", e);
+            throw new RuntimeException("ERRO: Falha ao associar entregador à entrega", e);
+        }
+    }
+
+    public void finalizarEntrega(String codigoEntregaFinal) {
+
+        String sql = """
+                UPDATE entregas
+                SET status = ?
+                WHERE codigo = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, StatusEntrega.ENTREGUE.name());
+            stmt.setString(2, codigoEntregaFinal);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("ERRO: Falha ao finalizar a entrega", e);
+        }
+
+    }
+
+    public void excluirEntrega(String codigoEntregaAtiva) {
+
+        String sql = """
+                DELETE FROM entregas WHERE codigo = ?
+                """;
+
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, codigoEntregaAtiva);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("ERRO: Falha ao cancelar a entrega", e);
         }
     }
 }
