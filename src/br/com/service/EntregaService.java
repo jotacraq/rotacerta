@@ -33,6 +33,15 @@ public class EntregaService {
             throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
         }
 
+        Integer entregadorExistente =
+                repository.buscarEntregadorIdPorCodigo(codigoEntrega);
+
+        if (entregadorExistente != null) {
+            throw new IllegalStateException(
+                    "ERRO: ESTA ENTREGA JÁ POSSUI ENTREGADOR ASSOCIADO!"
+            );
+        }
+
         repository.associarEntregador(codigoEntrega, entregadorId);
     }
 

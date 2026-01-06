@@ -60,8 +60,7 @@ public class EntregaRepository {
 
         List<Entrega> entregas = new ArrayList<>();
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Entrega entrega = Entrega.fromDatabase(rs);
@@ -134,4 +133,33 @@ public class EntregaRepository {
             throw new RuntimeException("ERRO: Falha ao cancelar a entrega", e);
         }
     }
+
+    public Integer buscarEntregadorIdPorCodigo(String codigoEntrega) {
+
+        String sql = """
+            SELECT e.entregador_id
+            FROM entregas e
+            WHERE e.codigo = ?
+            """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, codigoEntrega);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("entregador_id");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "ERRO: Falha ao consultar entregador da entrega", e
+            );
+        }
+
+        return null; // não tem entregador
+    }
+
+
 }
