@@ -4,6 +4,7 @@ import br.com.model.Entrega;
 import br.com.repository.EntregaRepository;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 public class EntregaService {
@@ -16,18 +17,29 @@ public class EntregaService {
 
     public void cadastrarEntrega(Entrega entrega) {
 
-        if (entrega.getCep().length() > 8) {
+        if (entrega.getCep() == null || entrega.getCep().length() != 8) {
             throw new IllegalArgumentException("ERRO: TAMANHO INVÁLIDO DE CEP!");
         }
 
-        repository.inserir(entrega);
+        try {
+            Entrega dadosCep = viaCepService.puxarDadosCEP(entrega.getCep());
+
+            entrega.setLogradouro(dadosCep.getLogradouro());
+            entrega.setBairro(dadosCep.getBairro());
+            entrega.setEstado(dadosCep.getEstado());
+
+            repository.inserir(entrega);
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("ERRO: Falha ao buscar CEP na API", e);
+        }
     }
 
     public List<Entrega> listarTodasEntregas() {
         return repository.buscarTodos();
     }
 
-    public void associarEntregador(String codigoEntrega, int entregadorId) {
+    public void associarEntregadorID(String codigoEntrega, int entregadorId) {
 
         if (codigoEntrega == null || codigoEntrega.isBlank()) {
             throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
@@ -36,7 +48,7 @@ public class EntregaService {
         Integer entregadorExistente =
                 repository.buscarEntregadorIdPorCodigo(codigoEntrega);
 
-        if (entregadorExistente != null) {
+        if (entregadorExistente != 0) {
             throw new IllegalStateException(
                     "ERRO: ESTA ENTREGA JÁ POSSUI ENTREGADOR ASSOCIADO!"
             );
@@ -44,6 +56,7 @@ public class EntregaService {
 
         repository.associarEntregador(codigoEntrega, entregadorId);
     }
+
 
     public void finalizarEntregar(String codigoEntregaFinal) {
 

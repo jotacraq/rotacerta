@@ -21,16 +21,18 @@ public class EntregaRepository {
     public void inserir(Entrega entrega) {
 
         String sql = """
-        INSERT INTO entregas (codigo, cep, estado, status)
-        VALUES (?, ?, ?, ?)
-    """;
+            INSERT INTO entregas (codigo, cep, logradouro, bairro, estado, status)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, entrega.getCodigo());
             stmt.setString(2, entrega.getCep());
-            stmt.setString(3, entrega.getEstado());
-            stmt.setString(4, entrega.getStatus());
+            stmt.setString(3, entrega.getLogradouro());
+            stmt.setString(4, entrega.getBairro());
+            stmt.setString(5, entrega.getEstado());
+            stmt.setString(6, entrega.getStatus());
 
             stmt.executeUpdate();
 
@@ -43,20 +45,21 @@ public class EntregaRepository {
     public List<Entrega> buscarTodos() {
 
         String sql = """
-            SELECT
-                e.entregador_id,
-                e.codigo,
-                e.cep,
-                e.estado,
-                e.status,
-                e.data_entrega,
-                en.nome,
-                en.cpf,
-                en.idade
-            FROM entregas e
-            INNER JOIN entregadores en ON en.id = e.entregador_id
-                """;
-
+        SELECT
+            e.entregador_id,
+            e.codigo,
+            e.cep,
+            e.logradouro,
+            e.bairro,
+            e.estado,
+            e.status,
+            e.data_entrega,
+            en.nome,
+            en.cpf,
+            en.idade
+        FROM entregas e
+        LEFT JOIN entregadores en ON en.id = e.entregador_id
+    """;
 
         List<Entrega> entregas = new ArrayList<>();
 
@@ -66,7 +69,6 @@ public class EntregaRepository {
                 Entrega entrega = Entrega.fromDatabase(rs);
                 entregas.add(entrega);
             }
-
 
         } catch (SQLException ex) {
             throw new RuntimeException("ERRO: Falha ao listar entregas", ex);
@@ -137,9 +139,9 @@ public class EntregaRepository {
     public Integer buscarEntregadorIdPorCodigo(String codigoEntrega) {
 
         String sql = """
-            SELECT e.entregador_id
-            FROM entregas e
-            WHERE e.codigo = ?
+            SELECT entregador_id
+            FROM entregas
+            WHERE codigo = ?
             """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -158,7 +160,7 @@ public class EntregaRepository {
             );
         }
 
-        return null; // não tem entregador
+        return 0; // não tem entregador
     }
 
 

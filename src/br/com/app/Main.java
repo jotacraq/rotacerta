@@ -100,10 +100,7 @@ public class Main {
                         System.out.print("CEP: ");
                         String cep = scanner.nextLine();
 
-                        System.out.print("ESTADO: ");
-                        String estado = scanner.nextLine();
-
-                        Entrega entrega = Entrega.paraInsercao(codigo, cep, estado);
+                        Entrega entrega = Entrega.paraInsercao(codigo, cep);
 
                         entregaService.cadastrarEntrega(entrega);
                         System.out.println("ENTREGA REGISTRADA!");
@@ -128,6 +125,8 @@ public class Main {
                                     "Código: " + e.getCodigo() +
                                             " | CEP: " + e.getCep() +
                                             " | Estado: " + e.getEstado() +
+                                            " | Rua: " + e.getLogradouro() +
+                                            " | Bairro: " + e.getBairro() +
                                             " | Status: " + e.getStatus() +
                                             " | Data: " + dataFormatada +
                                             " | Entregador: " + e.getEntregador().getNome() +
@@ -147,7 +146,7 @@ public class Main {
                         int entregadorId = scanner.nextInt();
                         scanner.nextLine();
 
-                        entregaService.associarEntregador(codigoEntrega, entregadorId);
+                        entregaService.associarEntregadorID(codigoEntrega, entregadorId);
 
                         System.out.println("ENTREGADOR ASSOCIADO À ENTREGA!");
                         break;

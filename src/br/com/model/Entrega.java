@@ -1,19 +1,24 @@
 package br.com.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Entrega {
 
     private int id;
     private String codigo;
     private String cep;
+    private String logradouro;
+    private String bairro;
     private String estado;
     private String status;
     private Timestamp dataEntrega;
 
-    private Entregador entregador; // 👈 RELACIONAMENTO
+    private Entregador entregador;
 
     private Entrega() {}
 
@@ -23,6 +28,8 @@ public class Entrega {
         e.codigo = rs.getString("codigo");
         e.cep = rs.getString("cep");
         e.estado = rs.getString("estado");
+        e.logradouro = rs.getString("logradouro");
+        e.bairro = rs.getString("bairro");
         e.status = rs.getString("status");
         e.dataEntrega = rs.getTimestamp("data_entrega");
 
@@ -36,17 +43,13 @@ public class Entrega {
         return e;
     }
 
-    public static Entrega paraInsercao(String codigo, String cep, String estado) {
+    public static Entrega paraInsercao(String codigo, String cep) {
         Entrega e = new Entrega();
         e.codigo = codigo;
         e.cep = cep;
-        e.estado = estado;
         e.status = StatusEntrega.PENDENTE.name();
+        // logradouro, bairro e estado serão preenchidos pelo service da API da ViaCEP
         return e;
-    }
-
-    public Entregador getEntregador() {
-        return entregador;
     }
 
     public int getId() {
@@ -73,6 +76,22 @@ public class Entrega {
         this.cep = cep;
     }
 
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
     public String getEstado() {
         return estado;
     }
@@ -95,6 +114,10 @@ public class Entrega {
 
     public void setDataEntrega(Timestamp dataEntrega) {
         this.dataEntrega = dataEntrega;
+    }
+
+    public Entregador getEntregador() {
+        return entregador;
     }
 
     public void setEntregador(Entregador entregador) {
