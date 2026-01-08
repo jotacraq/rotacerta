@@ -43,9 +43,8 @@ public class Entrega {
         return e;
     }
 
-    public static Entrega paraInsercao(String codigo, String cep) {
+    public static Entrega paraInsercao(String cep) {
         Entrega e = new Entrega();
-        e.codigo = codigo;
         e.cep = cep;
         e.status = StatusEntrega.PENDENTE.name();
         // logradouro, bairro e estado serão preenchidos pelo service da API da ViaCEP

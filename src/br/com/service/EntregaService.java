@@ -3,9 +3,9 @@ package br.com.service;
 import br.com.model.Entrega;
 import br.com.repository.EntregaRepository;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class EntregaService {
 
@@ -14,6 +14,23 @@ public class EntregaService {
     public EntregaService(EntregaRepository repository) {
         this.repository = repository;
     }
+
+    public static String gerarCodigo() {
+
+        int comprimento = 8;
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(comprimento);
+
+        for (int i = 0; i < comprimento; i++) {
+            int digito = random.nextInt(10);
+            sb.append(digito);
+        }
+
+        String codigo = "RTC" + sb;
+
+        return codigo;
+
+    };
 
     public void cadastrarEntrega(Entrega entrega) {
 

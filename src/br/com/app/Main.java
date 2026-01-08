@@ -94,13 +94,10 @@ public class Main {
                     // ---- OPÇÕES PARA ENTREGA ----
 
                     case 3:
-                        System.out.print("CÓDIGO: ");
-                        String codigo = scanner.nextLine();
-
                         System.out.print("CEP: ");
                         String cep = scanner.nextLine();
 
-                        Entrega entrega = Entrega.paraInsercao(codigo, cep);
+                        Entrega entrega = Entrega.paraInsercao(cep);
 
                         entregaService.cadastrarEntrega(entrega);
                         System.out.println("ENTREGA REGISTRADA!");

@@ -2,6 +2,7 @@ package br.com.repository;
 
 import br.com.model.Entrega;
 import br.com.model.StatusEntrega;
+import br.com.service.EntregaService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +28,7 @@ public class EntregaRepository {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, entrega.getCodigo());
+            stmt.setString(1, EntregaService.gerarCodigo());
             stmt.setString(2, entrega.getCep());
             stmt.setString(3, entrega.getLogradouro());
             stmt.setString(4, entrega.getBairro());
