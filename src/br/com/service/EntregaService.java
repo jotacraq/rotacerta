@@ -41,7 +41,7 @@ public class EntregaService {
 
     public void associarEntregadorID(String codigoEntrega, int entregadorId) {
 
-        if (codigoEntrega == null'''''''''''''''''''''''''''''''''''''' || codigoEntrega.isBlank()) {
+        if (codigoEntrega == null || codigoEntrega.isBlank()) {
             throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
         }
 
