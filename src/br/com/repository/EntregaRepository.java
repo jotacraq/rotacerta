@@ -13,14 +13,14 @@ import java.util.List;
 
 public class EntregaRepository {
 
-    private Connection conn;
+    private final Connection conn;
 
     public EntregaRepository(Connection connection) {
         this.conn = connection;
     }
 
+    // Insere uma nova entrega no banco
     public void inserir(Entrega entrega) {
-
         String sql = """
             INSERT INTO entregas (codigo, cep, logradouro, bairro, estado, status)
             VALUES (?, ?, ?, ?, ?, ?)
@@ -42,49 +42,48 @@ public class EntregaRepository {
         }
     }
 
-
+    // Lista todas as entregas
     public List<Entrega> buscarTodos() {
-
         String sql = """
-        SELECT
-            e.entregador_id,
-            e.codigo,
-            e.cep,
-            e.logradouro,
-            e.bairro,
-            e.estado,
-            e.status,
-            e.data_entrega,
-            en.nome,
-            en.cpf,
-            en.idade
-        FROM entregas e
-        LEFT JOIN entregadores en ON en.id = e.entregador_id
-    """;
+            SELECT
+                e.entregador_id,
+                e.codigo,
+                e.cep,
+                e.logradouro,
+                e.bairro,
+                e.estado,
+                e.status,
+                e.data_entrega,
+                en.nome,
+                en.cpf,
+                en.idade
+            FROM entregas e
+            LEFT JOIN entregadores en ON en.id = e.entregador_id
+        """;
 
         List<Entrega> entregas = new ArrayList<>();
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Entrega entrega = Entrega.fromDatabase(rs);
-                entregas.add(entrega);
+                entregas.add(Entrega.fromDatabase(rs));
             }
 
-        } catch (SQLException ex) {
-            throw new RuntimeException("ERRO: Falha ao listar entregas", ex);
+        } catch (SQLException e) {
+            throw new RuntimeException("ERRO: Falha ao listar entregas", e);
         }
 
         return entregas;
     }
 
+    // Associa um entregador a uma entrega
     public void associarEntregador(String codigoEntrega, int entregadorId) {
-
         String sql = """
-                UPDATE entregas
-                SET entregador_id = ?, status = ?
-                WHERE codigo = ?
-                """;
+            UPDATE entregas
+            SET entregador_id = ?, status = ?
+            WHERE codigo = ?
+        """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -99,13 +98,13 @@ public class EntregaRepository {
         }
     }
 
+    // Finaliza uma entrega
     public void finalizarEntrega(String codigoEntregaFinal) {
-
         String sql = """
-                UPDATE entregas
-                SET status = ?
-                WHERE codigo = ?
-                """;
+            UPDATE entregas
+            SET status = ?
+            WHERE codigo = ?
+        """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -117,19 +116,18 @@ public class EntregaRepository {
         } catch (SQLException e) {
             throw new RuntimeException("ERRO: Falha ao finalizar a entrega", e);
         }
-
     }
 
+    // Cancela (remove) uma entrega
     public void excluirEntrega(String codigoEntregaAtiva) {
-
         String sql = """
-                DELETE FROM entregas WHERE codigo = ?
-                """;
+            DELETE FROM entregas
+            WHERE codigo = ?
+        """;
 
-        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, codigoEntregaAtiva);
-
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -137,13 +135,13 @@ public class EntregaRepository {
         }
     }
 
+    // Busca o entregador associado a uma entrega
     public Integer buscarEntregadorIdPorCodigo(String codigoEntrega) {
-
         String sql = """
             SELECT entregador_id
             FROM entregas
             WHERE codigo = ?
-            """;
+        """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -161,8 +159,6 @@ public class EntregaRepository {
             );
         }
 
-        return 0; // não tem entregador
+        return 0;
     }
-
-
 }

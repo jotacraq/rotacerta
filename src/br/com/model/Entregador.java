@@ -1,9 +1,8 @@
 package br.com.model;
 
-import java.sql.Timestamp;
-
 public class Entregador {
 
+    // Dados do entregador
     private Integer id;
     private String nome;
     private String cpf;
@@ -12,22 +11,23 @@ public class Entregador {
     private Entregador() {
     }
 
+    // Cria um entregador a partir dos dados do banco
     public static Entregador fromDatabase(int id, String nome, String cpf, int idade) {
-        Entregador e = new Entregador();
-        e.id = id;
-        e.nome = nome;
-        e.cpf = cpf;
-        e.idade = idade;
-        return e;
+        Entregador entregador = new Entregador();
+        entregador.id = id;
+        entregador.nome = nome;
+        entregador.cpf = cpf;
+        entregador.idade = idade;
+        return entregador;
     }
 
-
+    // Cria um entregador para inserção no banco
     public static Entregador paraInsercao(String nome, String cpf, int idade) {
-        Entregador e = new Entregador();
-        e.nome = nome;
-        e.cpf = cpf;
-        e.idade = idade;
-        return e;
+        Entregador entregador = new Entregador();
+        entregador.nome = nome;
+        entregador.cpf = cpf;
+        entregador.idade = idade;
+        return entregador;
     }
 
     public Integer getId() {

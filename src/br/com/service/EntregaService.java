@@ -15,30 +15,27 @@ public class EntregaService {
         this.repository = repository;
     }
 
+    // Gera um código único para a entrega
     public static String gerarCodigo() {
-
         int comprimento = 8;
         Random random = new Random();
         StringBuilder sb = new StringBuilder(comprimento);
 
         for (int i = 0; i < comprimento; i++) {
-            int digito = random.nextInt(10);
-            sb.append(digito);
+            sb.append(random.nextInt(10));
         }
 
-        String codigo = "RTC" + sb;
+        return "RTC" + sb;
+    }
 
-        return codigo;
-
-    };
-
+    // Cadastra uma nova entrega
     public void cadastrarEntrega(Entrega entrega) {
-
         if (entrega.getCep() == null || entrega.getCep().length() != 8) {
             throw new IllegalArgumentException("ERRO: TAMANHO INVÁLIDO DE CEP!");
         }
 
         try {
+            // Busca dados do CEP via API
             Entrega dadosCep = viaCepService.puxarDadosCEP(entrega.getCep());
 
             entrega.setLogradouro(dadosCep.getLogradouro());
@@ -52,12 +49,13 @@ public class EntregaService {
         }
     }
 
+    // Lista todas as entregas cadastradas
     public List<Entrega> listarTodasEntregas() {
         return repository.buscarTodos();
     }
 
+    // Associa um entregador a uma entrega
     public void associarEntregadorID(String codigoEntrega, int entregadorId) {
-
         if (codigoEntrega == null || codigoEntrega.isBlank()) {
             throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
         }
@@ -74,9 +72,8 @@ public class EntregaService {
         repository.associarEntregador(codigoEntrega, entregadorId);
     }
 
-
+    // Finaliza uma entrega
     public void finalizarEntregar(String codigoEntregaFinal) {
-
         if (codigoEntregaFinal == null || codigoEntregaFinal.isBlank()) {
             throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
         }
@@ -84,13 +81,12 @@ public class EntregaService {
         repository.finalizarEntrega(codigoEntregaFinal);
     }
 
+    // Cancela (remove) uma entrega
     public void cancelarEntrega(String codigoEntregaAtiva) {
-
         if (codigoEntregaAtiva == null || codigoEntregaAtiva.isBlank()) {
             throw new IllegalArgumentException("ERRO: CÓDIGO DE ENTREGA INVÁLIDO!");
         }
 
         repository.excluirEntrega(codigoEntregaAtiva);
     }
-
 }

@@ -6,10 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="74f11c89-e799-4e38-a62d-12044554dd54" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/br/com/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/app/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/br/com/model/Entrega.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/model/Entrega.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/br/com/model/Entregador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/model/Entregador.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/br/com/repository/EntregaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/repository/EntregaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/br/com/repository/EntregadorRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/repository/EntregadorRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/br/com/service/EntregaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/service/EntregaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/br/com/service/EntregadorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/br/com/service/EntregadorService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,13 +76,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/br/com/repository/EntregaRepository.java</url>
-          <line>124</line>
+          <line>122</line>
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/br/com/service/EntregaService.java</url>
-          <line>79</line>
-          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
